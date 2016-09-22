@@ -23,12 +23,8 @@ int somme (int liste[],int taille)
 void copie_dans(int dest[],int src[],int taille)
 {
   int i;
-  //int mem;
   for(i=0; i<taille;i++)
   {
-    /*mem=src[i];
-    src[i]=dest[i];
-    dest[i]=mem;*/
     dest[i]=src[i];
   }
 }
@@ -65,5 +61,5 @@ int main(void)
   printf("liste 3: \n");
   afficher(liste3,14);
   printf("somme liste 3 : %i\n",somme(liste3,14));
-  return 0; 
+  return 1; 
 }
