@@ -45,21 +45,17 @@ int mon_strcmp(const char * s1,const char * s2)
 {
   int res = 0;
   int i;
-  int ascii_s1;
-  int ascii_s2;
-  int size_s1 = sizeof(s1)-1;
-  int size_s2 = sizeof(s2)-1;
+  int size_s1 = mon_strlen2(s1);
+  int size_s2 = mon_strlen2(s2);
   // CAS GENERAL : TAILLE EGAL
   if(size_s1 == size_s2) 
   {
     for(i=0; i<size_s1;i++){
-      ascii_s1 = (int) s1[i];
-      ascii_s2 = (int) s2[i];
-      if(res == 0 && ascii_s1 < ascii_s2)
+      if(res == 0 && (s1[i] < s2[i]))
       {
         res = -2;   
       }
-      if(res == 0 && ascii_s2 > ascii_s2)
+      if(res == 0 && (s1[i] > s2[i]))
       {
         res = 2; 
       }
@@ -80,15 +76,56 @@ int mon_strcmp(const char * s1,const char * s2)
   return res;
 }
 
+int mon_strncmp(const char * s1, const char * s2, int n)
+{
+  int res = 0;
+  int i;
+  for(i=0; i<n;i++){
+      if(res == 0 && (s1[i] < s2[i]))
+      {
+        res = -2;   
+      }
+      if(res == 0 && (s1[i] > s2[i]))
+      {
+        res = 2; 
+      }
+  }
+  return res;  
+}
+
+char *mon_strcat(char *s1,const char *s2)
+{
+  int sizeof_s1 = mon_strlen2(s1);
+  int sizeof_s2 = mon_strlen2(s2);
+  int i;
+  for(i=0; i<sizeof_s2; i++)
+  {
+    s1[sizeof_s1 + i] = s2[i];
+    s1[sizeof_s1 + i +1] = '\0';
+    printf("%i %s \n",i,s1);
+  }
+  s1[sizeof_s1+i] = '\0';
+  printf("lol\n");
+  return s1;
+}
+
 int main(void)
 {
-  char s[] = "Hop !"; 
+  char s[50] = "Hop !"; 
   char t[] = "Hop !!";
+  char u[] = "salut !";
   printf("la chaine comporte %d elements \n",mon_strlen(s));
   printf("la chaine comporte %d elements \n",mon_strlen2(s));
-  printf("s =>> %d -- t =>> %d \n",sizeof(s),sizeof(t));
+  printf("s =>> %d -- t =>> %d \n",sizeof(s)-1,sizeof(t)-1);
   printf("le resultat devrait etre de 0 =>>> %d \n",mon_strcmp(s,s));
   printf("le resultat devrait etre de +1 =>> %d \n",mon_strcmp(t,s));
   printf("le resultat devrait etre de -1 =>> %d \n",mon_strcmp(s,t));
+  printf("le resultat devrait etre de +2 =>> %d \n",mon_strcmp(s,u));
+  printf("le resultat devrait etre de 0 =>>> %d \n",mon_strncmp(s,t,3));
+  printf("le resultat devrait etre de 0 =>>> %d \n",mon_strncmp(s,t,5));
+  printf("le resultat devrait etre de +2 =>> %d \n",mon_strncmp(s,u,5));
+  printf("le resultat devrait etre de 0 =>>> %d \n",mon_strncmp(s,u,1));
+  mon_strcat(s,u);
+  printf(" s + t = <%s> soit une longeur de chaine de %d\n",s,mon_strlen2(s));
   return 0;
 }
