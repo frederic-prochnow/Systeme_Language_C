@@ -45,7 +45,7 @@ int main(int argc,char *argv[])
     printf("\nLe Programme n'a reçu aucun argument\n");
   } else {
      for(i = 1; i< argc; i++) {
-       printf("%d:%s\n",i,argv[i]);
+       //printf("%d:%s\n",i,argv[i]);
        if(argv[i] [0] == '-') {
          for(j=1; j<strlen(argv[i]); j++) {
             switch(argv[i] [j]) {
@@ -53,14 +53,33 @@ int main(int argc,char *argv[])
                case 's' : is = 1; break;
                default : res = -1; break;
             }
-         }
+        }
        } else {
-          if(im == 1) printf("%s\n",miroir(argv[i]));
-          else if(is == 1) printf("%s\n",saisie());
+          if(im == 1){
+		printf("%s\n",miroir(argv[i])); 
+		im--;
+	  }
+          else if(im == 1 && is == 1){
+	        printf("%s\n%s\n",saisie(),miroir(saisie()));
+                im--;is--;
+          } 
+          else if(im == 0 && is == 1) {
+                printf("%s\n",saisie());
+                is--;
+          }
           else if (res == -1) printf("\n ERREUR !!!\n");
           else printf("\n ERREUR !!!\n");
        }
     }
+    if(im == 1){ 
+        for(i = 1; i< argc; i++) {
+            printf("%s\n",miroir(argv[i]));
+	    break;    
+        }
+        
+    }
+    if(im == 1 && is == 1) printf("%s\n%s\n",saisie(),miroir($1));
+    if(im == 0 && is == 1) printf("%s\n",saisie());
   }
   return 1;
 }
