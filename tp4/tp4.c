@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include <ctype.h>
 
 
 char * miroir (const char *s)
@@ -21,17 +22,16 @@ char * miroir (const char *s)
 
 char * saisie ()
 {
-    char *chaine = malloc(sizeof(char));
-    char c;
-    int cpt=0;
-    do{
-      chaine = realloc(chaine,cpt+2);
-      c=getchar();
-      *(chaine+cpt)=c;
-      cpt++;
- }while(!isspace(c)); 
+  char *chaine = malloc(sizeof(char));
+  char c;
+  int cpt=0;
+  do{
+    chaine = realloc(chaine,cpt+2);
+    c=getchar();
+    *(chaine+cpt)=c;
+    cpt++;
+  }while(!isspace(c)); 
   return chaine;
-
 }
 
 int main(int argc,char *argv[])
@@ -42,10 +42,9 @@ int main(int argc,char *argv[])
   int is = 0;
   int res = 0;
   if(argc <= 1) {
-    printf("\nLe Programme n'a reçu aucun argument\n");
+    printf("\nLe Programme n'a recu aucun argument\n");
   } else {
      for(i = 1; i< argc; i++) {
-       //printf("%d:%s\n",i,argv[i]);
        if(argv[i] [0] == '-') {
          for(j=1; j<strlen(argv[i]); j++) {
             switch(argv[i] [j]) {
@@ -53,33 +52,27 @@ int main(int argc,char *argv[])
                case 's' : is = 1; break;
                default : res = -1; break;
             }
-        }
-       } else {
-          if(im == 1){
-		printf("%s\n",miroir(argv[i])); 
-		im--;
-	  }
-          else if(im == 1 && is == 1){
-	        printf("%s\n%s\n",saisie(),miroir(saisie()));
-                im--;is--;
-          } 
-          else if(im == 0 && is == 1) {
-                printf("%s\n",saisie());
-                is--;
           }
-          else if (res == -1) printf("\n ERREUR !!!\n");
-          else printf("\n ERREUR !!!\n");
        }
-    }
-    if(im == 1){ 
-        for(i = 1; i< argc; i++) {
-            printf("%s\n",miroir(argv[i]));
-	    break;    
-        }
-        
-    }
-    if(im == 1 && is == 1) printf("%s\n%s\n",saisie(),miroir($1));
-    if(im == 0 && is == 1) printf("%s\n",saisie());
+       else {
+	 if(    im == 1 && is == 0){
+	   printf("%s\n",miroir(argv[i])); 
+	   im--;
+	 }
+	  
+	 else if(im == 0 && is == 1) {
+	   printf("%s\n",saisie());
+	   is--;
+	 }
+	 else if(im == 1 && is == 1){
+	   char * res = saisie();
+	   printf("%s%s\n",res,miroir(res));
+	   im--;
+	   is--;
+	 }
+	 else if (res == -1) printf("\n ERREUR !!!\n");
+	 else printf("\n ERREUR !!!\n");
+       }
+     }
   }
-  return 1;
 }
