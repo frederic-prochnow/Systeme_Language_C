@@ -28,8 +28,8 @@ int cptCaractere(char * f)
      }
      compteur += readFile;
  }
- return compteur;
  close(openFile);
+ return compteur;
 }
 
 int cptMot(char * f)
@@ -54,8 +54,8 @@ int cptMot(char * f)
     }
     compteur += readFile;
   }
-  return compteur;
   close(openFile);
+  return compteur;
 }
 
 int cptLigne(char * f)
@@ -79,8 +79,8 @@ int cptLigne(char * f)
     }
     compteur += readFile;
   }
-  return compteur;
   close(openFile);
+  return compteur;
 }
 
 int main(int argc,char *argv[])
