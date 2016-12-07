@@ -23,7 +23,7 @@ int cptCaractere(char * f)
     readFile = read(openFile,buffer,100);
     while(!(readFile < 100)){
        compteur += readFile;
-       printf("----nb : %d -- readFile : %d\n",compteur,readFile);
+       //printf("----nb : %d -- readFile : %d\n",compteur,readFile);
        readFile = read(openFile,buffer,100);
      }
      compteur += readFile;
