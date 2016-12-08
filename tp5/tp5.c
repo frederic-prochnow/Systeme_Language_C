@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <ctype.h>
 
 /**
 * W C
@@ -23,7 +24,6 @@ int cptCaractere(char * f)
     readFile = read(openFile,buffer,100);
     while(!(readFile < 100)){
        compteur += readFile;
-       //printf("----nb : %d -- readFile : %d\n",compteur,readFile);
        readFile = read(openFile,buffer,100);
      }
      compteur += readFile;
@@ -90,6 +90,12 @@ int main(int argc,char *argv[])
  int c = 0;
  int w = 0;
  int l = 0;
+ int intc =0;
+ int intw =0;
+ int intl =0;
+ int totalc =0;
+ int totalw =0;
+ int totall =0;
  int res = 0;
  if(argc <= 1) {
     printf("\nLe Programme n'a reçu aucun argument\n");
@@ -105,21 +111,35 @@ int main(int argc,char *argv[])
             }
           }
        	} else {
-          if(c == 1){
-            printf("nb caractere : %d --> %s\n",cptCaractere(argv[argc-1]),argv[argc-1]);
+          if(c == 1) {
+            intc = cptCaractere(argv[i]);
+            if(intc >0) {
+              printf("nb caractere : %d --> %s\n",intc,argv[i]);
+	      totalc += intc;
+            }
 	  }
           if(w == 1){
-            printf("nb mot : %d --> %s\n",cptMot(argv[argc-1]),argv[argc-1]);
-
+	    intw = cptMot(argv[i]);
+            if(intw >0) {      
+              printf("nb mot : %d --> %s\n",intw,argv[i]);
+	      totalw += intw;
+	    }
           }
           if(l == 1){
-            printf("nb ligne : %d --> %s\n",cptLigne(argv[argc-1]),argv[argc-1]);          
+            intl = cptLigne(argv[i]);
+            if(intl >0) {
+              printf("nb ligne : %d --> %s\n",intl,argv[i]);
+              totall += intl;
+            }          
           }
           if(res == -1){
             printf("ERREUR");
           }
+          printf("----------------------------------------------\n");
         }
     }
   }
+  printf("---------------------TOTAL--------------------\n");
+  printf("NB CARAC = %d - NB MOT = %d - NB LIGNE = %d\n",totalc,totalw,totall);
   return 1; 
 }
