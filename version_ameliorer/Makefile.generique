@@ -1,0 +1,65 @@
+# Ce makefile est un makefile "générique" qui produit
+# un exécutable nommé comme le répertoire qui le contient
+# à partir de tous les fichiers .c contenu dans le répertoire
+
+# Les options de compilation
+CFLAGS = -Wall -W -Werror
+# Le compilateur utilisé. On peut par exemple le changer par clang
+CC = gcc
+
+# Le nom du programme produit est le nom du répertoire
+# $(shell cmd) permet de lancer la commande cmd et
+# de récupérer sa sortie standard
+# Ici on utilise pwd qui donne le chemin absolu du répertoire courant
+# et basename qui prends un chemin absolu et supprime la partie répertoire
+# basename /home/hauspie/toto donne toto
+OUTPUT=$(shell basename $(shell pwd))
+
+# On récupère la liste des fichiers .c dans une variable
+# $(wildcard *.c) est une commande makefile qui permet d'obtenir la liste
+# des fichiers qui correspondent à un motif donné
+SRCS=$(wildcard *.c)
+# On récupère la liste des fichiers entête
+HDRS=$(wildcard *.h)
+# On transforme la liste de fichiers .c en une liste de fichiers .o
+# Cette construction particulière veut dire: prendre le contenu de la
+# variable SRCS et remplacer .c par .o
+OBJS=$(SRCS:%.c=%.o)
+
+# La première règle du makefile est exécutée par défaut
+# La cible est le nom de l'exécutable, les dépendances
+# sont les fichiers .o
+# L'action correspond à l'édition de lien.
+# $@ est le nom de la cible
+# $^ est la liste des dépendances
+$(OUTPUT): $(OBJS)
+	$(CC) -o $@ $^
+
+
+# Dans ce makefile générique, on construit automatiquement
+# la liste des dépendances pour chacun des fichiers .o à construire
+# En effet, un fichier .o dépend non seulement du fichier .c associé
+# mais également de tous les fichiers inclus dans ce fichier.
+# On utilise gcc avec l'option -MM pour construire ces dépendances.
+# Après exécution de cette règle, le fichier makefile.dep contiendra la
+# liste des fichiers .o à construire avec comme dépendance le fichier .c associé
+# ET les fichiers .h inclus
+# Le fichier sera construit quand make en aura besoin (voir la ligne include plus bas)
+makefile.dep: $(SRCS) $(HDRS) Makefile
+	$(CC) $(CFLAGS) -MM $(SRCS) > $@
+
+
+# Les règles de nettoyage:
+# clean supprime les fichiers .o
+# mrproper rappelle clean et supprime en plus l'exécutable
+# le .PHONY sert à indiquer que ces règles ne sont jamais à jour
+# et doivent être exécutée à chaque fois que c'est demandé
+.PHONY: clean mrproper
+clean:
+	$(RM) $(OBJS)
+mrproper: clean
+	$(RM) $(OUTPUT)
+
+# On include le fichier de dépendance des .o
+# S'il n'existe pas, make chercher une règle qui permet de le construire
+include makefile.dep

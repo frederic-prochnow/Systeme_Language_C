@@ -1,0 +1,2 @@
+mon_shell : mon_shell.c
+	gcc -W -Wall -Werror -o ligne_commande.o mon_shell.c
