@@ -9,15 +9,45 @@
 **/
 void execute_ligne_commande()
 {
-  int flag = 0;
-  int nb = 0;
-  int x = 0;
-  char *** iutsh = ligne_commande(&flag,&nb);
-  //iutsh[x][y][z] ou x est ici nb, y les arguments de x et z est y carcatere par caractere. A chaque fois fini par null.
-  for(x=0; x<nb;x++) {
-    execvp(iutsh[x][0],iutsh[x]);
+  pid_t pid;
+  int status;
+  int flag;
+  int nb;
+  int x;
+  char *** iutsh;
+
+  pid = fork();
+
+  switch(pid) {
+    case -1 :
+      perror ("fork");
+      exit(1);
+    case 0 :
+      flag = 0;
+      nb = 0;
+      x = 0;
+      iutsh = ligne_commande(&flag,&nb);
+      //iutsh[x][y][z] ou x est ici nb, y les arguments de x et z est y carcatere par caractere. A chaque fois fini par null.
+      if (flag == 1) {
+        for(x=0; x<nb;x++) {
+          execvp(iutsh[x][0],iutsh[x]);
+          exit(1);
+        }
+      }
+      else if (flag == 0) {
+        for(x=0; x<nb; x++) {
+          execvp(iutsh[x][0],iutsh[x]);
+          exit(2);
+        }
+      }
+      else {
+        printf("ERREUR !!!");
+        affiche(iutsh);
+      }
+    default :
+      wait(&status);
   }
-}
+}  
 
 int main()//int argc,char * argv[])
 {
