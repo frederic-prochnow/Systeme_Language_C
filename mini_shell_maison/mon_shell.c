@@ -1,6 +1,9 @@
 #include "ligne_commande.h"
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /**
 * Elle lit une commande et l’exécuter. La lecture de cette ligne se fait grâce à la fonction ligne_commande présente dans le fichier ligne_commande.h.
@@ -15,6 +18,8 @@ void execute_ligne_commande()
   int nb;
   int x;
   char *** iutsh;
+
+  printf("$");
 
   pid = fork();
 
@@ -49,7 +54,7 @@ void execute_ligne_commande()
   }
 }  
 
-int main()//int argc,char * argv[])
+int main()
 {
   execute_ligne_commande();
   return 1;
